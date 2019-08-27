@@ -8,6 +8,11 @@ import java.time.Duration;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 二、操作符
+ * 完整的操作符查看：
+ * https://htmlpreview.github.io/?https://github.com/get-set/reactor-core/blob/master-zh/src/docs/index.html
+ */
 public class FluxOperatorTest {
 
     @Test
