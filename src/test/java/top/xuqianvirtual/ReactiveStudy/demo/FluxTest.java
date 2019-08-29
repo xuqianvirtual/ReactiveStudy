@@ -77,4 +77,12 @@ public class FluxTest {
                 .expectErrorMessage("some error")
                 .verify();
     }
+
+    @Test
+    public void testInfiniteFlux() {
+        // 补充：生成无限流
+        Flux.fromStream(Stream.iterate(0, n -> n + 2))
+                .take(10)   // 务必保留此操作符，否则...
+                .subscribe(System.out::println);
+    }
 }
