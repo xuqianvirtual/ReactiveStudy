@@ -3,8 +3,11 @@ package top.xuqianvirtual.ReactiveStudy.webclient;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
+import top.xuqianvirtual.ReactiveStudy.model.Event;
 import top.xuqianvirtual.ReactiveStudy.model.User;
 
+import java.time.Duration;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -44,8 +47,19 @@ public class WebClientTest {
                 .accept(MediaType.TEXT_EVENT_STREAM)    // 服务器推送事件，SSE
                 .retrieve()
                 .bodyToFlux(String.class)
-                .log()  // 等价于doOnNext(System.out::println)
+                .log()  // 相当于doOnNext(System.out::println)，但更详细
                 .take(10)   // 截取10个
                 .blockLast();
     }
+
+    @Test
+    public void testPostEvents() {
+        // 没什么好说的，1s生成一个事件
+        WebClient.create("http://localhost:8080").post().uri("/events").contentType(MediaType.APPLICATION_STREAM_JSON)
+                .body(Flux.interval(Duration.ofSeconds(1))
+                        .map(l -> new Event(System.currentTimeMillis(), "message-" + l)).take(4),
+                        Event.class).retrieve().bodyToMono(Void.class).block();
+    }
+
+
 }
