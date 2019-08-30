@@ -18,7 +18,7 @@ public class FluxArray<T> extends Flux<T> {
     }
 
     // 实现该发布者对应的subcription，用于定义如何发布者如何与订阅者交互
-    static class ArraySubscription<T> implements Subscription {
+    static final class ArraySubscription<T> implements Subscription {
         final Subscriber<? super T> actual;
         final T[] array;
         int index;
