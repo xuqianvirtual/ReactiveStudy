@@ -1,14 +1,12 @@
 package top.xuqianvirtual.ReactiveStudy.demo;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.junit.Test;
 import reactor.core.publisher.Flux;
+import top.xuqianvirtual.ReactiveStudy.demo.model.MyEvent;
+import top.xuqianvirtual.ReactiveStudy.demo.model.MyEventListener;
+import top.xuqianvirtual.ReactiveStudy.demo.model.MyEventSource;
 
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -62,40 +60,6 @@ public class CustomizeDataFluxTest {
     }
 
     // create()方法比generate()更高级，生成数据流的方式可以同步也可以异步，每次可以发出多个元素
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    class MyEvent {
-        private Date timestamp;
-        private String message;
-    }
-
-    interface MyEventListener {
-        void onNewEvent(MyEvent event);
-        void onEventStopped();
-    }
-
-    class MyEventSource {
-        private List<MyEventListener> listenners;
-        public MyEventSource() {
-            this.listenners = new LinkedList<>();
-        }
-        public void register(MyEventListener listener) {
-            // 注册监听器
-            this.listenners.add(listener);
-        }
-        public void newEvent(MyEvent event) {
-            // 发送新事件
-            for (MyEventListener listener:listenners)
-                listener.onNewEvent(event);
-        }
-        public void eventStopped() {
-            // 告知监听器事件源已停止
-            for (MyEventListener listener:listenners)
-                listener.onEventStopped();
-        }
-    }
-
     @Test
     public void testCreate() throws InterruptedException {
         // 定义事件源
